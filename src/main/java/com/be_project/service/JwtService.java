@@ -10,25 +10,28 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = "1234567890";
+    // key để mã hóa token.
+    private static final String SECRET_KEY = "123456789999887abc";
+    // thời gian để token sống.
     private static final long EXPIRE_TIME = 86400000000L;
 
+    // hàm tạo ra token
     public String createToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
         return Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject((user.getUsername()))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + EXPIRE_TIME * 1000))
+                .setExpiration(new Date((new Date()).getTime() + EXPIRE_TIME * 1000))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
     }
 
-    public String getUsernameFromJwtToken (String token) {
-        String username = Jwts.parser()
+    public String getUserNameFromJwtToken(String token) {
+        String userName = Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody().getSubject();
-        return username;
+        return userName;
     }
 }

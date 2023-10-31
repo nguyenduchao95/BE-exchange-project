@@ -34,11 +34,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().ignoringAntMatchers("/**");
+//        http.csrf().ignoringAntMatchers("/**");
         http.authorizeRequests()
                 .antMatchers( "/ws/**", "/api/init").permitAll()
                 .antMatchers( "/api/posts/**", "/api/images/**").permitAll()
-                .anyRequest().authenticated()
+//                .antMatchers("/login", "/register").permitAll()
+//                .anyRequest().authenticated()
                 .and().csrf().disable();
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

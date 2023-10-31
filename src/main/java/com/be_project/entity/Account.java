@@ -18,10 +18,10 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true)
-    @Email(message = "Email should be valid")
-    @NotBlank(message = "Email is required")
-    private String email;
+//    @Column(unique = true)
+//    @Email(message = "Email should be valid")
+//    @NotBlank(message = "Email is required")
+//    private String email;
 
     @Column(unique = true)
     @NotBlank(message = "Username is required")
@@ -34,6 +34,8 @@ public class Account {
     private String name;
     private String status;
     private String avatar;
+    private String phone;
+    private String address;
 
     @ManyToOne
     private Role role;

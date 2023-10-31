@@ -18,11 +18,11 @@ public class Notification {
     private long id;
     @Lob
     private String type;
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
-    private Date date = Date.valueOf(LocalDate.now());
+    private LocalDate date = LocalDate.now();
     @ManyToOne
-    private Account sender; // người gửi
+    private Account sender;
     @ManyToOne
-    private Account receiver; // người nhận
+    private Account receiver;
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -16,11 +17,12 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
-    private Date date = Date.valueOf(LocalDate.now());
+    private String status = "Chưa xem";
+    private LocalDateTime createdAt = LocalDateTime.now();
     @ManyToOne
-    private Account sender; // người gửi
+    private Account sender;
     @ManyToOne
-    private Account receiver; // người nhận
+    private Account receiver;
 }

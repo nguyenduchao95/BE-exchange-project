@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
@@ -17,10 +16,10 @@ public class Exchange {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private long id;
     private String content;
-    private String status;
+    private String status = "Chờ xác nhận";
     @ManyToOne
     private Post postSell;
     @ManyToOne
     private Post postBuy;
-    private Date date = Date.valueOf(LocalDate.now());
+    private LocalDate date = LocalDate.now();
 }

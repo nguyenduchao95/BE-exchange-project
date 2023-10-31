@@ -1,4 +1,5 @@
 package com.be_project.controller;
+import com.be_project.entity.Account;
 import com.be_project.service.IAccountService;
 import com.be_project.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,16 @@ public class AccountController {
     private IAccountService accountService;
     @Autowired
     private IPostService postService;
+
+
+    @GetMapping("/{accountId}")
+    public ResponseEntity<?> getById(@PathVariable long accountId) {
+        try {
+            return ResponseEntity.ok(accountService.getById(accountId));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
     @GetMapping("/{accountId}/posts")
     public ResponseEntity<?> getAllPostsByAccountId(@PathVariable Long accountId,
@@ -41,6 +52,15 @@ public class AccountController {
                                                                          @RequestParam("username") String username) {
         try {
             return ResponseEntity.ok(accountService.findAllByUsernameContainsAndNotAccountLogin(username, accountId));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{accountId}")
+    public ResponseEntity<?> editAccount(@PathVariable int accountId, @RequestBody Account accountEdit) {
+        try {
+            return ResponseEntity.ok(accountService.editAccount(accountId, accountEdit));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

@@ -24,5 +24,7 @@ public interface IAccountRepo extends JpaRepository<Account, Long> {
 
     @Query("SELECT a FROM Account a WHERE a.username LIKE CONCAT('%', :username, '%') AND a.id != :accountId AND a.status != 'Bị khóa'")
     List<Account> findAllByUsernameContainsAndNotAccountLogin(@Param("username") String username, @Param("accountId") long accountId);
+    @Query(nativeQuery = true, value = "SELECT * FROM account where username= :username and password= :password")
+    Account getAccountLogin(@Param("username") String username, @Param("password") String password);
 
 }

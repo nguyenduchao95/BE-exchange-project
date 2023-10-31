@@ -14,7 +14,7 @@ public class MessageController {
     @Autowired
     private IMessageService messageService;
 
-    @GetMapping("/api/messages/{senderId}/{receiverId}")
+    @GetMapping("/{senderId}/{receiverId}")
     public ResponseEntity<?> getAllMessagesBySenderIdAndReceiverId(@PathVariable long senderId,
                                                                    @PathVariable long receiverId) {
         try {

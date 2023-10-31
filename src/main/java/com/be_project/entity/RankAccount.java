@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Rank {
+public class RankAccount {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private long id;

@@ -11,6 +11,10 @@ import java.util.List;
 
 
 public interface IAccountService extends UserDetailsService {
+    Account getAccountLogin(String username, String password);
+
+    boolean register(Account account);
+
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
     Page<Account> findAllByStatusContainingAndUsernameContaining(String status, String username, int page, int size);
@@ -19,4 +23,6 @@ public interface IAccountService extends UserDetailsService {
 
     List<AccountAndMessageDto> listUserAndUnreadMessage(long userId);
     List<Account> findAllByUsernameContainsAndNotAccountLogin(String username, long accountId);
+    Account getById(long accountId);
+    Account editAccount(long accountId, Account accountEdit);
 }

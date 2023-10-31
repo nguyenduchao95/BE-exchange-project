@@ -4,23 +4,22 @@ import com.be_project.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 @Data
 @AllArgsConstructor
 public class AccountToken {
-    private int id;
+    private long id;
     private String username;
-    private String token;
-    private String firstname;
-    private String lastname;
-    private String address;
-    private String email;
-    private String phone;
-    private String avatar;
-    private double wallet;
+    private String name;
     private String status;
+    private String avatar;
+    private String phone;
+    private String address;
     private Role role;
-    private String province;
-    private String district;
-    private String ward;
+    private String token;
 
 }

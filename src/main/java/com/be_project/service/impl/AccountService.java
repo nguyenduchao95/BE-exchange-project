@@ -1,6 +1,7 @@
 package com.be_project.service.impl;
 
 import com.be_project.entity.Account;
+import com.be_project.entity.Role;
 import com.be_project.entity.dto.AccountAndMessageDto;
 import com.be_project.repository.IAccountRepo;
 import com.be_project.repository.IMessageRepo;
@@ -23,6 +24,24 @@ public class AccountService implements IAccountService {
     private IAccountRepo accountRepo;
     @Autowired
     private IMessageRepo messageRepo;
+
+    @Override
+    public Account getAccountLogin(String username, String password) {
+        return accountRepo.getAccountLogin(username, password);
+    }
+
+    @Override
+    public boolean register(Account account) {
+        Account account1 = accountRepo.findByUsername(account.getUsername());
+        if (account1 != null){
+            return false;
+        }
+        account.setRole(new Role(2));
+        account.setStatus("Đang hoạt động");
+        account.setAvatar("https://cdn-icons-png.flaticon.com/512/3177/3177440.png");
+        accountRepo.save(account);
+        return true;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -69,5 +88,20 @@ public class AccountService implements IAccountService {
     @Override
     public List<Account> findAllByUsernameContainsAndNotAccountLogin(String username, long accountId) {
         return accountRepo.findAllByUsernameContainsAndNotAccountLogin(username, accountId);
+    }
+
+    @Override
+    public Account getById(long accountId) {
+        return accountRepo.findById(accountId).get();
+    }
+
+    @Override
+    public Account editAccount(long accountId, Account accountEdit) {
+        Account account = accountRepo.findById(accountId).get();
+        account.setName(accountEdit.getName());
+        account.setPhone(accountEdit.getPhone());
+        account.setAddress(accountEdit.getAddress());
+        account.setAvatar(accountEdit.getAvatar());
+        return accountRepo.save(account);
     }
 }

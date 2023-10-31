@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -19,11 +18,6 @@ public class Account {
     private long id;
 
     @Column(unique = true)
-    @Email(message = "Email should be valid")
-    @NotBlank(message = "Email is required")
-    private String email;
-
-    @Column(unique = true)
     @NotBlank(message = "Username is required")
     private String username;
 
@@ -34,6 +28,8 @@ public class Account {
     private String name;
     private String status;
     private String avatar;
+    private String phone;
+    private String address;
 
     @ManyToOne
     private Role role;

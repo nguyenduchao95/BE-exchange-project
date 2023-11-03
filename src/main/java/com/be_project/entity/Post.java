@@ -25,5 +25,16 @@ public class Post {
     private String status;
     @ManyToOne
     private Account account;
-    private int countLike;
+    private int countView = 0;
+
+    public Post(String title, String category, String description, String requirement, String address, String avatar,Account account) {
+        this.title = title;
+        this.category = category;
+        this.description = description;
+        this.requirement = requirement;
+        this.address = address;
+        this.avatar = avatar;
+        this.status = "Chưa trao đổi";
+        this.account = account;
+    }
 }

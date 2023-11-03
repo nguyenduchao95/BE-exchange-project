@@ -45,9 +45,9 @@ public class AccountService implements IAccountService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepo.findByUsername(username);
+        Account account = accountRepo.getAccountByUsername(username);
         List<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(account.getRole());
+        roles.add((GrantedAuthority) account.getRole());
         return new User(account.getUsername(), account.getPassword(), roles);
     }
 
@@ -94,7 +94,10 @@ public class AccountService implements IAccountService {
     public Account getById(long accountId) {
         return accountRepo.findById(accountId).get();
     }
-
+    @Override
+    public Account getAccountByUsername(String username) {
+        return accountRepo.findByUsername(username);
+    }
     @Override
     public Account editAccount(long accountId, Account accountEdit) {
         Account account = accountRepo.findById(accountId).get();

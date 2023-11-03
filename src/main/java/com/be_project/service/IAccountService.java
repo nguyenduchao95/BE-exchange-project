@@ -25,4 +25,6 @@ public interface IAccountService extends UserDetailsService {
     List<Account> findAllByUsernameContainsAndNotAccountLogin(String username, long accountId);
     Account getById(long accountId);
     Account editAccount(long accountId, Account accountEdit);
+    Account getAccountByUsername(String username);
+
 }

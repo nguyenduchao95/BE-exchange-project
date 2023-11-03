@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface IAccountRepo extends JpaRepository<Account, Long> {
     Account findByUsername(String username);
+    Account getAccountByUsername(String username);
     Page<Account> findAllByStatusContainingAndUsernameContaining(String status, String username, Pageable pageable);
     @Query(
             nativeQuery = true,

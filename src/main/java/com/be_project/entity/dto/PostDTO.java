@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class PostDTO {
+    private long id;
     private String title;
     private String category;
     private String description;

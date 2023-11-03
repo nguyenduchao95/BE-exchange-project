@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class PostService implements IPostService {
@@ -47,6 +48,27 @@ public class PostService implements IPostService {
         for (Image i: postDTO.getImages()) {
             Image image = new Image(i.getUrl(),post);
             imageRepo.save(image);
+        }
+        return postRepo.save(post);
+    }
+
+    @Override
+    public List<Image> getImagesByPost(long postId) {
+        return imageRepo.findAllByPostId(postId);
+    }
+
+    @Override
+    public Post editPost(PostDTO postDTO) {
+        imageRepo.deleteByPostId(postDTO.getId());
+        Post post = postRepo.getById(postDTO.getId());
+        post.setAvatar(postDTO.getAvatar());
+        post.setAddress(postDTO.getAddress());
+        post.setCategory(postDTO.getCategory());
+        post.setDescription(postDTO.getDescription());
+        post.setTitle(postDTO.getTitle());
+        post.setRequirement(postDTO.getRequirement());
+        for (Image i:postDTO.getImages()) {
+            imageRepo.save(new Image(i.getUrl(),post));
         }
         return postRepo.save(post);
     }

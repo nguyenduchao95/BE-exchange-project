@@ -16,7 +16,7 @@ public class AppointmentSchedule {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private long id;
     private Date date;
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String address;
     @OneToOne
     private Exchange exchange;

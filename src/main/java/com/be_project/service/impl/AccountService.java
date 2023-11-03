@@ -107,4 +107,17 @@ public class AccountService implements IAccountService {
         account.setAvatar(accountEdit.getAvatar());
         return accountRepo.save(account);
     }
+
+    @Override
+    public void changePassword(long accountId, String password) {
+        Account account = accountRepo.findById(accountId).get();
+        account.setPassword(password);
+        accountRepo.save(account);
+    }
+
+    @Override
+    public boolean checkPassword(long accountId, String password) {
+        Account account = accountRepo.findById(accountId).get();
+        return account.getPassword().equals(password);
+    }
 }

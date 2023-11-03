@@ -21,5 +21,5 @@ public class Exchange {
     private Post postSell;
     @ManyToOne
     private Post postBuy;
-    private LocalDate date = LocalDate.now();
+    private LocalDate createdAt = LocalDate.now();
 }

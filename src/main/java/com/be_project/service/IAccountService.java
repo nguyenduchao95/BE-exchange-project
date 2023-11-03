@@ -18,13 +18,22 @@ public interface IAccountService extends UserDetailsService {
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
     Page<Account> findAllByStatusContainingAndUsernameContaining(String status, String username, int page, int size);
+
     void blockAccount(Long accountId);
+
     void unBlockAccount(Long accountId);
 
     List<AccountAndMessageDto> listUserAndUnreadMessage(long userId);
+
     List<Account> findAllByUsernameContainsAndNotAccountLogin(String username, long accountId);
+
     Account getById(long accountId);
+
     Account editAccount(long accountId, Account accountEdit);
+
+    void changePassword(long accountId, String password);
+
+    boolean checkPassword(long accountId, String password);
     Account getAccountByUsername(String username);
 
 }

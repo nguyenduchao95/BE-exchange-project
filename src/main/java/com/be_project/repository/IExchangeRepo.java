@@ -28,7 +28,7 @@ public interface IExchangeRepo extends JpaRepository<Exchange, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Exchange e SET e.status = 'Đã hủy' " +
+    @Query("UPDATE Exchange e SET e.status = 'Đã hủy', e.reason = 'Sản phẩm bán hoặc sản phẩm mua đã giao dịch với sản phẩm khác' " +
             "WHERE (e.postBuy.id = :postSellId " +
             "OR (e.postSell.id = :postSellId AND e.postBuy.id != :postBuyId)) " +
             "OR (e.postSell.id = :postBuyId " +

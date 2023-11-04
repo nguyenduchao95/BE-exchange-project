@@ -22,7 +22,16 @@ public class ExchangeController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/success")
+    public ResponseEntity<?> confirmExchange(@RequestBody Exchange exchange) {
+        try {
+            return ResponseEntity.ok(exchangeService.confirmExchange(exchange));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/fail")
     public ResponseEntity<?> denyExchange(@RequestBody Exchange exchange) {
         try {
             return ResponseEntity.ok(exchangeService.denyExchange(exchange));

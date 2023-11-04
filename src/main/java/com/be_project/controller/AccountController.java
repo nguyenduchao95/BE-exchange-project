@@ -4,6 +4,7 @@ import com.be_project.entity.Account;
 import com.be_project.entity.dto.FilterDto;
 import com.be_project.service.IAccountService;
 import com.be_project.service.IExchangeService;
+import com.be_project.service.IPostPinService;
 import com.be_project.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,8 @@ public class AccountController {
     private IPostService postService;
     @Autowired
     private IExchangeService exchangeService;
+    @Autowired
+    private IPostPinService postPinService;
 
 
     @GetMapping("/{accountId}")
@@ -96,6 +99,16 @@ public class AccountController {
                                                       @RequestParam(name = "size", defaultValue = "10") int size) {
         try {
             return ResponseEntity.ok(exchangeService.getAllByAccountId(accountId, filterDto.getStatus(), filterDto.getPostSell(), filterDto.getPostBuy(), filterDto.getStartDate(), filterDto.getEndDate(), page, size));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("{accountSell}/{accountBuy}/post-pin")
+    public ResponseEntity<?> getPostPin(@PathVariable long accountSell,
+                                        @PathVariable long accountBuy) {
+        try {
+            return ResponseEntity.ok(postPinService.findByAccountSellAndAccountBuy(accountSell, accountBuy));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

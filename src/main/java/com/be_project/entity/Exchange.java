@@ -17,6 +17,7 @@ public class Exchange {
     private long id;
     private String content;
     private String status = "Chờ xác nhận";
+    private String reason;
     @ManyToOne
     private Post postSell;
     @ManyToOne

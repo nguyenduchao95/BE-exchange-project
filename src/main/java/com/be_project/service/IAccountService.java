@@ -34,4 +34,6 @@ public interface IAccountService extends UserDetailsService {
     void changePassword(long accountId, String password);
 
     boolean checkPassword(long accountId, String password);
+    Account getAccountByUsername(String username);
+
 }

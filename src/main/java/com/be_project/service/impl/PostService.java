@@ -1,9 +1,8 @@
 package com.be_project.service.impl;
 
-import com.be_project.entity.Account;
 import com.be_project.entity.Image;
 import com.be_project.entity.Post;
-import com.be_project.entity.dto.PostDTO;
+import com.be_project.entity.dto.PostDto;
 import com.be_project.repository.IImageRepo;
 import com.be_project.repository.IPostRepo;
 import com.be_project.service.IPostService;
@@ -37,39 +36,30 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Post getById(long postId) {
-        return postRepo.findById(postId).get();
-    }
-
-    @Override
-    public Post createPost(Account account, PostDTO postDTO) {
-        Post post = new Post( postDTO.getTitle(), postDTO.getCategory(), postDTO.getDescription(), postDTO.getRequirement(), postDTO.getAddress(),
-                postDTO.getAvatar(),account);
-        for (Image i: postDTO.getImages()) {
-            Image image = new Image(i.getUrl(),post);
-            imageRepo.save(image);
-        }
+    public Post getByIdAndIncreaseViews(long postId) {
+        Post post = postRepo.findById(postId).get();
+        post.setCountView(post.getCountView() + 1);
         return postRepo.save(post);
     }
 
     @Override
-    public List<Image> getImagesByPost(long postId) {
-        return imageRepo.findAllByPostId(postId);
+    public Post createPost(PostDto postDto) {
+        Post post = new Post(postDto);
+        Post postDB = postRepo.save(post);
+        List<Image> imageList = postDto.getImages();
+        for (Image image : postDto.getImages()) {
+            image.setPost(postDB);
+        }
+        imageRepo.saveAll(imageList);
+        return postDB;
     }
 
     @Override
-    public Post editPost(PostDTO postDTO) {
-        imageRepo.deleteByPostId(postDTO.getId());
-        Post post = postRepo.getById(postDTO.getId());
-        post.setAvatar(postDTO.getAvatar());
-        post.setAddress(postDTO.getAddress());
-        post.setCategory(postDTO.getCategory());
-        post.setDescription(postDTO.getDescription());
-        post.setTitle(postDTO.getTitle());
-        post.setRequirement(postDTO.getRequirement());
-        for (Image i:postDTO.getImages()) {
-            imageRepo.save(new Image(i.getUrl(),post));
-        }
+    public Post editPost(long postId, PostDto postDto) {
+        imageRepo.saveAll(postDto.getImages());
+        imageRepo.deleteAll(postDto.getImagesDelete());
+        Post post = new Post(postDto);
+        post.setId(postId);
         return postRepo.save(post);
     }
 }

@@ -2,6 +2,7 @@ package com.be_project.controller;
 
 import com.be_project.entity.Account;
 import com.be_project.entity.dto.FilterDto;
+import com.be_project.entity.dto.PostDto;
 import com.be_project.service.IAccountService;
 import com.be_project.service.IExchangeService;
 import com.be_project.service.IPostPinService;
@@ -109,6 +110,23 @@ public class AccountController {
                                         @PathVariable long accountBuy) {
         try {
             return ResponseEntity.ok(postPinService.findByAccountSellAndAccountBuy(accountSell, accountBuy));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/posts")
+    public ResponseEntity<?> createPost(@RequestBody PostDto postDto) {
+        try {
+            return ResponseEntity.ok(postService.createPost(postDto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<?> editPost(@RequestBody PostDto postDto, @PathVariable long postId) {
+        try {
+            return ResponseEntity.ok(postService.editPost(postId, postDto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

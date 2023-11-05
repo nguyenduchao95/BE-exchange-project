@@ -4,9 +4,11 @@ import com.be_project.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 
 public interface IPostRepo extends JpaRepository<Post, Long> {
@@ -28,4 +30,10 @@ public interface IPostRepo extends JpaRepository<Post, Long> {
                                   @Param("startDate") LocalDate startDate,
                                   @Param("endDate") LocalDate endDate,
                                   Pageable pageable);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Post p SET p.status = :status WHERE p.account.id = :accountId")
+    void changeStatusPostByAccountId(@Param("accountId") long accountId,
+                                     @Param("status") String status);
 }

@@ -35,4 +35,12 @@ public interface IExchangeRepo extends JpaRepository<Exchange, Long> {
             "OR (e.postSell.id != :postSellId AND e.postBuy.id = :postBuyId))")
     void removeAll(@Param("postSellId") long postSellId,
                    @Param("postBuyId") long postBuyId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Exchange e SET e.status = 'Đã hủy', e.reason = 'Sản phẩm bán hoặc sản phẩm mua tạm thời bị vô hiệu hóa' " +
+            "WHERE (e.postBuy.account.id = :accountId " +
+            "OR e.postSell.account.id = :accountId) " +
+            "AND e.status != 'Đã trao đổi'")
+    void removeAllByAccountId(@Param("accountId") long accountId);
 }

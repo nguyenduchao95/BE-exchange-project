@@ -4,7 +4,9 @@ import com.be_project.entity.Account;
 import com.be_project.entity.Role;
 import com.be_project.entity.dto.AccountAndMessageDto;
 import com.be_project.repository.IAccountRepo;
+import com.be_project.repository.IExchangeRepo;
 import com.be_project.repository.IMessageRepo;
+import com.be_project.repository.IPostRepo;
 import com.be_project.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,10 @@ public class AccountService implements IAccountService {
     private IAccountRepo accountRepo;
     @Autowired
     private IMessageRepo messageRepo;
+    @Autowired
+    private IPostRepo postRepo;
+    @Autowired
+    private IExchangeRepo exchangeRepo;
 
     @Override
     public Account getAccountLogin(String username, String password) {
@@ -62,6 +68,8 @@ public class AccountService implements IAccountService {
         if (account != null && account.getStatus().equals("Đang hoạt động")){
             account.setStatus("Bị khóa");
             accountRepo.save(account);
+            postRepo.changeStatusPostByAccountId(accountId, "Vô hiệu hóa");
+            exchangeRepo.removeAllByAccountId(accountId);
         }
     }
 
@@ -71,6 +79,7 @@ public class AccountService implements IAccountService {
         if (account != null && account.getStatus().equals("Bị khóa")){
             account.setStatus("Đang hoạt động");
             accountRepo.save(account);
+            postRepo.changeStatusPostByAccountId(accountId, "Chưa trao đổi");
         }
     }
 

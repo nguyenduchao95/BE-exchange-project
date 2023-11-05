@@ -2,7 +2,6 @@ package com.be_project.entity.dto;
 
 import com.be_project.entity.Account;
 import com.be_project.entity.Image;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;

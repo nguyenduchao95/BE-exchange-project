@@ -14,6 +14,8 @@ import java.time.LocalDate;
 public class FilterDto {
     private String status = "";
     private String title = "";
+    private String category = "";
+    private String username = "";
     private String postSell = "";
     private String postBuy = "";
     private LocalDate startDate;

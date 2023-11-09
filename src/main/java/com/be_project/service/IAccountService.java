@@ -2,6 +2,7 @@ package com.be_project.service;
 
 import com.be_project.entity.Account;
 import com.be_project.entity.dto.AccountAndMessageDto;
+import com.be_project.entity.dto.AccountDto;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,5 +36,7 @@ public interface IAccountService extends UserDetailsService {
 
     boolean checkPassword(long accountId, String password);
     Account getAccountByUsername(String username);
-
+    Account changeLocation(long accountId, Account account);
+    List<AccountDto> getAccountsAroundHere(Account account);
+    boolean checkUsername(String username);
 }

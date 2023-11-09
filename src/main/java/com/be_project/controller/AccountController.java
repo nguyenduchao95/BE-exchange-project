@@ -44,7 +44,7 @@ public class AccountController {
                                                     @RequestParam(name = "page", defaultValue = "0") int page,
                                                     @RequestParam(name = "size", defaultValue = "10") int size) {
         try {
-            return ResponseEntity.ok(postService.getAllByAccountId(accountId, filterDto.getStatus(), filterDto.getTitle(), filterDto.getStartDate(), filterDto.getEndDate(), page, size));
+            return ResponseEntity.ok(postService.getAllByAccountId(accountId, filterDto, page, size));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -127,6 +127,24 @@ public class AccountController {
     public ResponseEntity<?> editPost(@RequestBody PostDto postDto, @PathVariable long postId) {
         try {
             return ResponseEntity.ok(postService.editPost(postId, postDto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{accountId}/location")
+    public ResponseEntity<?> changeLocation(@RequestBody Account account, @PathVariable long accountId) {
+        try {
+            return ResponseEntity.ok(accountService.changeLocation(accountId, account));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/search-around-here")
+    public ResponseEntity<?> searchAroundHere(@RequestBody Account account) {
+        try {
+            return ResponseEntity.ok(accountService.getAccountsAroundHere(account));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

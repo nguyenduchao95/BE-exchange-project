@@ -3,10 +3,8 @@ package com.be_project.service.impl;
 import com.be_project.entity.Account;
 import com.be_project.entity.Role;
 import com.be_project.entity.dto.AccountAndMessageDto;
-import com.be_project.repository.IAccountRepo;
-import com.be_project.repository.IExchangeRepo;
-import com.be_project.repository.IMessageRepo;
-import com.be_project.repository.IPostRepo;
+import com.be_project.entity.dto.AccountDto;
+import com.be_project.repository.*;
 import com.be_project.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +28,8 @@ public class AccountService implements IAccountService {
     private IPostRepo postRepo;
     @Autowired
     private IExchangeRepo exchangeRepo;
+    @Autowired
+    private IRoleRepo roleRepo;
 
     @Override
     public Account getAccountLogin(String username, String password) {
@@ -42,7 +42,8 @@ public class AccountService implements IAccountService {
         if (account1 != null){
             return false;
         }
-        account.setRole(new Role(2));
+        Role role = roleRepo.findByName("ROLE_USER");
+        account.setRole(role);
         account.setStatus("Đang hoạt động");
         account.setAvatar("https://cdn-icons-png.flaticon.com/512/3177/3177440.png");
         accountRepo.save(account);
@@ -66,10 +67,10 @@ public class AccountService implements IAccountService {
     public void blockAccount(Long accountId) {
         Account account = accountRepo.findById(accountId).get();
         if (account != null && account.getStatus().equals("Đang hoạt động")){
+            exchangeRepo.removeAllByAccountId(accountId);
             account.setStatus("Bị khóa");
             accountRepo.save(account);
             postRepo.changeStatusPostByAccountId(accountId, "Vô hiệu hóa");
-            exchangeRepo.removeAllByAccountId(accountId);
         }
     }
 
@@ -101,12 +102,44 @@ public class AccountService implements IAccountService {
 
     @Override
     public Account getById(long accountId) {
-        return accountRepo.findById(accountId).get();
+        Account account = accountRepo.findById(accountId).get();
+        account.setPassword(null);
+        return account;
     }
     @Override
     public Account getAccountByUsername(String username) {
         return accountRepo.findByUsername(username);
     }
+
+    @Override
+    public Account changeLocation(long accountId, Account account) {
+        Account accountDB = accountRepo.findById(accountId).get();
+        accountDB.setLatitude(account.getLatitude());
+        accountDB.setLongitude(account.getLongitude());
+        accountRepo.save(accountDB);
+        accountDB.setPassword(null);
+        return accountDB;
+    }
+
+    @Override
+    public List<AccountDto> getAccountsAroundHere(Account account) {
+        List<Account> accounts = accountRepo.findAll();
+        List<AccountDto> accountDtoList = new ArrayList<>();
+        for (Account a : accounts){
+            if (a.getId() != account.getId() && !a.getLatitude().equals("0") && !a.getLongitude().equals("0")){
+                AccountDto accountDto = new AccountDto(a);
+                accountDto.setDistance(calculateDistance(Double.parseDouble(account.getLatitude()), Double.parseDouble(account.getLongitude()), Double.parseDouble(a.getLatitude()), Double.parseDouble(a.getLongitude())));
+                accountDtoList.add(accountDto);
+            }
+        }
+        return accountDtoList;
+    }
+
+    @Override
+    public boolean checkUsername(String username) {
+        return accountRepo.findByUsername(username) != null;
+    }
+
     @Override
     public Account editAccount(long accountId, Account accountEdit) {
         Account account = accountRepo.findById(accountId).get();
@@ -128,5 +161,21 @@ public class AccountService implements IAccountService {
     public boolean checkPassword(long accountId, String password) {
         Account account = accountRepo.findById(accountId).get();
         return account.getPassword().equals(password);
+    }
+
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        double R = 6371; // Bán kính trái đất ở đơn vị kilômét
+
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        double distance = R * c; // Khoảng cách ở đơn vị kilômét
+        return Math.round(distance * 100) / 100.00;
     }
 }

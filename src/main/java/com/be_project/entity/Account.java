@@ -30,7 +30,8 @@ public class Account {
     private String avatar;
     private String phone;
     private String address;
-
     @ManyToOne
     private Role role;
+    private String latitude = "0";
+    private String longitude = "0";
 }

@@ -39,10 +39,10 @@ public class Login_Register_Controller {
             String token = jwtService.createToken(authentication);
             if (account.getStatus().equals("Bị khóa")) {
                 String errorMessage = "Tài khoản đã bị khóa!";
-                return new ResponseEntity<>(errorMessage, HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(errorMessage, HttpStatus.UNAUTHORIZED);
             }
-            AccountToken accountToken = new AccountToken(account.getId(), account.getUsername(), account.getName(), account.getStatus(),
-                    account.getAvatar(), account.getPhone(), account.getAddress(), account.getRole(), token);
+            AccountToken accountToken = new AccountToken(account.getId(), account.getUsername(), null, account.getName(), account.getStatus(),
+                    account.getAvatar(), account.getPhone(), account.getAddress(), account.getRole(), account.getLatitude(), account.getLongitude(), token);
             return new ResponseEntity<>(accountToken, HttpStatus.OK);
         } catch (AuthenticationException e) {
             String errorMessage = "Tài khoản hoặc mật khẩu không chính xác!";
@@ -56,6 +56,16 @@ public class Login_Register_Controller {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Tài khoản đã tồn tại!", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/register/check-username")
+    public boolean checkUsername(@RequestBody Account account){
+        try {
+            return accountService.checkUsername(account.getUsername());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return false;
         }
     }
 }

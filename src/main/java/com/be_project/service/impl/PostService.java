@@ -10,6 +10,7 @@ import com.be_project.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,13 @@ public class PostService implements IPostService {
 
     @Override
     public Page<Post> getAll(FilterDto filterDto, int page, int size) {
-        return postRepo.getAll(filterDto.getStatus(), filterDto.getUsername(), filterDto.getTitle(), filterDto.getCategory() ,PageRequest.of(page, size));
+        Pageable pageable;
+        if (filterDto.getSort() != null && filterDto.getSort().equals("createdAt-desc")) {
+            pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        } else {
+            pageable = PageRequest.of(page, size);
+        }
+        return postRepo.getAll(filterDto.getStatus(), filterDto.getUsername(), filterDto.getTitle(), filterDto.getCategoryPost(), pageable);
     }
 
     @Override
@@ -33,7 +40,7 @@ public class PostService implements IPostService {
         if (filterDto.getStartDate() == null) filterDto.setStartDate(LocalDate.parse("1000-01-01"));
 
         if (filterDto.getEndDate() == null) filterDto.setEndDate(LocalDate.parse("9999-12-31"));
-        return postRepo.findAllByAccountId(accountId,filterDto.getCategory(), filterDto.getStatus(), filterDto.getTitle(), filterDto.getStartDate(), filterDto.getEndDate(), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt")));
+        return postRepo.findAllByAccountId(accountId, filterDto.getCategoryPost(), filterDto.getStatus(), filterDto.getTitle(), filterDto.getStartDate(), filterDto.getEndDate(), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt")));
     }
 
     @Override

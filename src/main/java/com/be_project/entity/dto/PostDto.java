@@ -1,6 +1,7 @@
 package com.be_project.entity.dto;
 
 import com.be_project.entity.Account;
+import com.be_project.entity.CategoryProduct;
 import com.be_project.entity.Image;
 import lombok.Data;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public class PostDto {
     private long id;
     private String title;
-    private String category;
+    private String categoryPost;
     private String description;
     private String requirement;
     private String address;
@@ -21,4 +22,5 @@ public class PostDto {
     private List<Image> images;
     private List<Image> imagesDelete;
     private Account account;
+    private CategoryProduct categoryProduct;
 }

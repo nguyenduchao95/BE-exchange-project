@@ -17,7 +17,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
-    private String category;
+    private String categoryPost;
     private String description;
     private String requirement;
     private String address;
@@ -28,10 +28,12 @@ public class Post {
     @ManyToOne
     private Account account;
     private long countView;
+    @ManyToOne
+    private CategoryProduct categoryProduct;
 
     public Post(PostDto postDto) {
         this.title = postDto.getTitle();
-        this.category = postDto.getCategory();
+        this.categoryPost = postDto.getCategoryPost();
         this.description = postDto.getDescription();
         this.requirement = postDto.getRequirement();
         this.address = postDto.getAddress();
@@ -40,5 +42,6 @@ public class Post {
         this.countView = postDto.getCountView();
         this.account = postDto.getAccount();
         this.createdAt =postDto.getCreatedAt();
+        this.categoryProduct = postDto.getCategoryProduct();
     }
 }

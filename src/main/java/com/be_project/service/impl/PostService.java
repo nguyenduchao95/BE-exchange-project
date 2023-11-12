@@ -29,10 +29,19 @@ public class PostService implements IPostService {
         Pageable pageable;
         if (filterDto.getSort() != null && filterDto.getSort().equals("createdAt-desc")) {
             pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        } else if (filterDto.getSort() != null && filterDto.getSort().equals("countView-asc")) {
+            pageable = PageRequest.of(page, size, Sort.by("countView").ascending());
+        } else if (filterDto.getSort() != null && filterDto.getSort().equals("countView-desc")) {
+            pageable = PageRequest.of(page, size, Sort.by("countView").descending());
         } else {
             pageable = PageRequest.of(page, size);
         }
-        return postRepo.getAll(filterDto.getStatus(), filterDto.getUsername(), filterDto.getTitle(), filterDto.getCategoryPost(), pageable);
+
+        if (filterDto.getStartDate() == null) filterDto.setStartDate(LocalDate.parse("1000-01-01"));
+
+        if (filterDto.getEndDate() == null) filterDto.setEndDate(LocalDate.parse("9999-12-31"));
+
+        return postRepo.getAll(filterDto.getStatus(), filterDto.getUsername(), filterDto.getTitle(), filterDto.getCategoryPost(), filterDto.getCategoryProductName(), filterDto.getStartDate(), filterDto.getEndDate(), pageable);
     }
 
     @Override
@@ -40,7 +49,8 @@ public class PostService implements IPostService {
         if (filterDto.getStartDate() == null) filterDto.setStartDate(LocalDate.parse("1000-01-01"));
 
         if (filterDto.getEndDate() == null) filterDto.setEndDate(LocalDate.parse("9999-12-31"));
-        return postRepo.findAllByAccountId(accountId, filterDto.getCategoryPost(), filterDto.getStatus(), filterDto.getTitle(), filterDto.getStartDate(), filterDto.getEndDate(), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt")));
+
+        return postRepo.findAllByAccountId(accountId, filterDto.getCategoryPost(), filterDto.getCategoryProductName(), filterDto.getStatus(), filterDto.getTitle(), filterDto.getStartDate(), filterDto.getEndDate(), PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt")));
     }
 
     @Override

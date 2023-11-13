@@ -12,6 +12,8 @@ import com.be_project.service.IAppointmentScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AppointmentScheduleService implements IAppointmentScheduleService {
     @Autowired
@@ -40,5 +42,10 @@ public class AppointmentScheduleService implements IAppointmentScheduleService {
         postRepo.save(postBuy);
         exchangeRepo.save(exchange);
         return appointmentScheduleRepo.save(appointmentSchedule);
+    }
+
+    @Override
+    public List<AppointmentSchedule> getByAccountId(long accountId) {
+        return appointmentScheduleRepo.getByAccountId(accountId);
     }
 }
